@@ -731,24 +731,7 @@ void drivskills(){
 
     //chassis.turnToHeading(-45,1000);
     chassis.moveToPose(-7,6,-45,1400,{.forwards=false,.maxSpeed=70});
-    chassis.waitUntil(15);
-    scorebottom();
-    pros::delay(200);
-    scorebottomslow();
-    pros::delay(800);
-    chassis.moveToPoint(-50,50,1000);
-    chassis.turnToHeading(-90,500);
-
-    redloaderskillsclose();
     
-    //crosstop
-
-    chassis.moveToPoint(-40,60,1000,{.forwards=false});
-    chassis.waitUntil(6);
-    match.retract();
-
-    chassis.turnToHeading(90,1000);
-    stop();
     
 }
 void far(){
@@ -793,7 +776,7 @@ rd::Selector selector({
     {"ElimL", &elim_l, "", 50},//done
     //{"Q R", &q_r, "", 150},
     {"ElimR", &elim_r, "", 150},
-    {"Skills", &skillsv2, "", 250},
+    {"Skills", &midskills, "", 250},
 });
 int mode = 0;
 
