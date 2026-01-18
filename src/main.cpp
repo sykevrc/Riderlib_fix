@@ -134,7 +134,7 @@ void scorebottom(){
 void scorebottomslow(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    out.move_velocity(-100);
+    out.move_velocity(-120);
 }
 void scoot(){
     intake.move_voltage(13000);
@@ -583,7 +583,7 @@ void midskills(){
     outtakefast();
     match.extend();
     //chassis.turnToHeading(90,600);
-    chassis.waitUntil(5);
+    chassis.waitUntil(8);
     run_intake();
     chassis.waitUntil(24);
 
@@ -623,7 +623,7 @@ void midskills(){
 
     chassis.swingToHeading(-80,lemlib::DriveSide::RIGHT,800);
     
-    chassis.moveToPoint(20,-16,1200);
+    chassis.moveToPoint(20,-15,1200);
     chassis.waitUntil(20);
     chassis.turnToHeading(132,800,{.maxSpeed=50});
     chassis.moveToPoint(12,-13,800,{.forwards=false});
@@ -670,7 +670,7 @@ void midskills(){
 
     chassis.waitUntilDone();
     chassis.setPose(chassis.getPose().x,-70.5+((leftdist.get_distance()/25.4+3)),chassis.getPose().theta);
-    chassis.moveToPoint(0,-48,1000,{.forwards=false,.maxSpeed=70});
+    chassis.moveToPoint(0,-48,1000,{.forwards=false});
     chassis.waitUntil(6);
     scoretop();
     pros::delay(900);
@@ -731,7 +731,24 @@ void drivskills(){
 
     //chassis.turnToHeading(-45,1000);
     chassis.moveToPose(-7,6,-45,1400,{.forwards=false,.maxSpeed=70});
+    chassis.waitUntil(15);
+    scorebottom();
+    pros::delay(200);
+    scorebottomslow();
+    pros::delay(800);
+    chassis.moveToPoint(-50,50,1000);
+    chassis.turnToHeading(-90,500);
+
+    redloaderskillsclose();
     
+    //crosstop
+
+    chassis.moveToPoint(-40,60,1000,{.forwards=false});
+    chassis.waitUntil(6);
+    match.retract();
+
+    chassis.turnToHeading(90,1000);
+    stop();
     
 }
 void far(){
