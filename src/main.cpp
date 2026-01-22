@@ -851,6 +851,8 @@ void initialize() {
             if(colorsens.get_proximity()>70){
                 descore.extend();
                 pros::delay(300);
+            }else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+                descore.retract();
             }
         }
     });
