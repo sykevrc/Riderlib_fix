@@ -147,7 +147,10 @@ void stop(){
     out.move_voltage(0);
 
 }
-
+void reclaim(){
+    top.move_voltage(-13000);
+    out.move_voltage(13000);
+}
 void push(bool side){
     if(side){//left
     match.retract();
@@ -383,18 +386,18 @@ void rush_l(){
 void rush_r(){
     chassis.setPose(-50.5,-19.5,90);
     //chassis.setPose(-57,20.5,90);
-    chassis.moveToPoint(-24,-24,1000,{.minSpeed=10});
+    chassis.moveToPoint(-24,-24,800,{.minSpeed=10});
     run_intake();
     chassis.waitUntil(16);
     match.extend();
-    chassis.turnToHeading(-135,800);
-    chassis.moveToPoint(-47,-48,1500,{.minSpeed=10});
+    chassis.turnToHeading(-135,500);
+    chassis.moveToPoint(-47,-47,1500,{.minSpeed=10});
     top.move_relative(600,600);
     chassis.turnToHeading(-90,700,{.maxSpeed=50});
     
     redloaderquick(true);
     top.move_relative(300,600);
-    chassis.moveToPoint(-15,-49,1000,{.forwards=false});
+    chassis.moveToPoint(-22,-48,1000,{.forwards=false});
     chassis.waitUntil(16);
     scoretop();
     pros::delay(2000);
@@ -435,7 +438,7 @@ void elim_l(){
     redloaderquick(true);
     chassis.moveToPoint(-48,chassis.getPose().y,600,{.forwards=false});
     chassis.turnToHeading(-45,500);
-    chassis.moveToPoint(-9,9,1200,{.forwards=false});
+    chassis.moveToPoint(-11,11,1200,{.forwards=false});
     chassis.waitUntil(24);
     scorebottom();    
     chassis.turnToHeading(-45,300);
@@ -443,12 +446,12 @@ void elim_l(){
     pros::delay(800);
     chassis.moveToPoint(-44,35,600);
     chassis.turnToHeading(90,400);
-    chassis.moveToPoint(-10,37,700);
+    chassis.moveToPoint(-6,35,700,{.minSpeed=30});
 }
 void elim_r(){
     chassis.setPose(-50.5,-19.5,90);
     //chassis.setPose(-57,20.5,90);
-    chassis.moveToPoint(-24,-24,1000,{.minSpeed=10});
+    chassis.moveToPoint(-24,-24,800,{.minSpeed=10});
     run_intake();
     chassis.waitUntil(16);
     match.extend();
@@ -456,7 +459,7 @@ void elim_r(){
     match.retract();
     chassis.moveToPoint(-7,-30,700,{.maxSpeed=45});
     chassis.turnToHeading(180,400);
-    chassis.moveToPoint(-7,-37,700);
+    chassis.moveToPoint(-7.5,-41,700);
     chassis.waitUntil(8);
     match.extend();
     pros::delay(500);
@@ -470,7 +473,7 @@ void elim_r(){
     
     redloaderquick(true);
     top.move_relative(300,600);
-    chassis.moveToPoint(-15,-49,1000,{.forwards=false});
+    chassis.moveToPoint(-20,-48,1000,{.forwards=false});
     chassis.waitUntil(16);
     scoretop();
     pros::delay(2400);
@@ -526,12 +529,16 @@ void sawp(){
     scorebottom();
 
 
-    match.retract();
+    //match.retract();
     chassis.turnToHeading(-45,500);
     
     pros::delay(700);
     stop();
     chassis.moveToPoint(-50,48.5,1000);
+    chassis.waitUntil(2);
+    reclaim();
+    chassis.waitUntil(12);
+
     run_intake();
     match.extend();
     top.move_relative(200,600);
@@ -562,6 +569,10 @@ void midskills(){
     scorebottomslow();
     pros::delay(800);
     chassis.moveToPoint(-50,50,1000);
+    chassis.waitUntil(2);
+    reclaim();
+    chassis.waitUntil(12);
+    stop();
     chassis.turnToHeading(-90,500);
 
     redloaderskillsclose();
@@ -626,7 +637,7 @@ void midskills(){
     run_intake();
     chassis.waitUntil(28);
     match.extend();
-    chassis.moveToPoint(64,-80,500,{.maxSpeed=45,.minSpeed=33});
+    chassis.moveToPoint(64,-80,900,{.maxSpeed=45,.minSpeed=33});
     
     chassis.moveToPoint(64,-10,400,{.forwards=false,.minSpeed=30});
     chassis.moveToPoint(64,-10,800,{.forwards=false,.maxSpeed=30});
@@ -657,6 +668,10 @@ void midskills(){
     //last half
     chassis.moveToPoint(48,-50,1200);
     match.extend();
+    chassis.waitUntil(2);
+    reclaim();
+    chassis.waitUntil(12);
+    stop();
     
     chassis.turnToHeading(90,500);
     scorebottom();
@@ -753,6 +768,10 @@ void drivskills(){
     scorebottomslow();
     pros::delay(800);
     chassis.moveToPoint(-50,50,1000);
+    chassis.waitUntil(2);
+    reclaim();
+    chassis.waitUntil(12);
+    stop();
     chassis.turnToHeading(-90,500);
 
     redloaderskillsclose();
@@ -824,14 +843,17 @@ void initialize() {
     colorsens.set_led_pwm(100);
     // starthue = colorsens.get_hue();
 
-    // pros::Task selectTask([&]() {
-    //     while(true){
-    //         if(button.get_value()){
-    //         selector.next_auton();
-    //         }
-            
-    //     }
-    // });
+    pros::Task selectTask([&]() {
+        while(true){
+            if(button.get_new_press()){
+            selector.next_auton();
+            }
+            if(colorsens.get_proximity()>70){
+                descore.extend();
+                pros::delay(300);
+            }
+        }
+    });
     
 
     selector.on_select([](std::optional<rd::Selector::routine_t> routine) {
