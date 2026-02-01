@@ -20,7 +20,7 @@ pros::MotorGroup rightMotors({9,20,13}, pros::MotorGearset::blue); // right moto
 
 pros::Motor intake(1);
 pros::Motor top(8);
-pros::Motor out(21);
+pros::Motor out(-21);
 
 pros::adi::Pneumatics hood(1, false);
 pros::adi::Pneumatics descore(2, false);
@@ -36,8 +36,8 @@ pros::Imu imu(11);
 // vertical tracking wheel encoder. Rotation sensor, port 11, reversed
 //pros::Rotation verticalEnc(3);
 // distance sensor, right side on port 12
-pros::Distance rightdist(18);
-pros::Distance leftdist(5);
+pros::Distance rightdist(7);
+pros::Distance leftdist(4);
 
 pros::Optical colorsens(3);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
@@ -840,7 +840,7 @@ void initialize() {
     //rightMotors.set_encoder_units_all(pros::E_MOTOR_ENCODER_DEGREES);
     //leftMotors.set_encoder_units_all(pros::E_MOTOR_ENCODER_DEGREES);
 
-    colorsens.set_led_pwm(100);
+    //colorsens.set_led_pwm(100);
     // starthue = colorsens.get_hue();
 
     pros::Task selectTask([&]() {
@@ -848,12 +848,12 @@ void initialize() {
             if(button.get_new_press()){
             selector.next_auton();
             }
-            if(colorsens.get_proximity()>70){
-                descore.extend();
-                pros::delay(300);
-            }else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
-                descore.retract();
-            }
+            // if(colorsens.get_proximity()>70){
+            //     descore.extend();
+            //     pros::delay(300);
+            // }else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
+            //     descore.retract();
+            // }
         }
     });
     
@@ -911,11 +911,11 @@ void opcontrol() {
         chassis.arcade(leftY, rightX);
         if(!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
             stop();
-            descore.retract();
+            descore.extend();
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
         {
-            descore.extend();
+            descore.retract();
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2))
         {
