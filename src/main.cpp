@@ -1,4 +1,5 @@
 #include "main.h"
+#include <cmath>
 #include "pros/abstract_motor.hpp"
 #include "pros/adi.hpp"
 #include "pros/misc.h"
@@ -127,14 +128,14 @@ void scoretop(){
 void scorebottom(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    out.move_voltage(-10000);
+    out.move_voltage(-13000);
 
     //hood.extend();  
 }
 void scorebottomslow(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    out.move_velocity(-90);
+    out.move_velocity(-105);
 }
 void scoot(){
     intake.move_voltage(13000);
@@ -182,15 +183,8 @@ void push(bool side){
 }
 void redloaderquick(bool color){
     chassis.moveToPoint(-95,chassis.getPose().y,500,{.maxSpeed=45,.minSpeed=40});
-    chassis.moveToPoint(-95,chassis.getPose().y,600,{.maxSpeed=14,.minSpeed=10});
-    pros::delay(300);
-    if(color){
-    if(colorsens.get_hue()>100)chassis.cancelMotion();
-
-    }else{
-    if(colorsens.get_hue()<180)chassis.cancelMotion();
-
-    }
+    chassis.moveToPoint(-95,chassis.getPose().y,700,{.maxSpeed=14,.minSpeed=10});
+    
     //pros::delay(100);
     //chassis.moveToPoint(chassis.getPose().x+.5,chassis.getPose().y,300,{.forwards=false,.minSpeed=30});
     //chassis.moveToPoint(chassis.getPose().x-15,chassis.getPose().y,1000,{.minSpeed=30});
@@ -200,9 +194,9 @@ void redloaderskillsclose(){
     chassis.moveToPoint(-75,chassis.getPose().y,500,{.maxSpeed=45,.minSpeed=40});
     run_intake();
 
-    chassis.moveToPoint(-75,chassis.getPose().y,800,{.maxSpeed=14,.minSpeed=10});
+    chassis.moveToPoint(-75,chassis.getPose().y,1000,{.maxSpeed=30,.minSpeed=10});
     chassis.waitUntilDone();
-    pros::delay(600);
+    pros::delay(500);
     //chassis.moveToPoint(chassis.getPose().x+3,chassis.getPose().y,500);
     //chassis.moveToPoint(-75,chassis.getPose().y,500,{.maxSpeed=45,.minSpeed=40});
     //pros::delay(500);
@@ -212,9 +206,9 @@ void redloaderskillsfar(){
     chassis.moveToPoint(75,chassis.getPose().y,500,{.maxSpeed=45,.minSpeed=40});
     run_intake();
 
-    chassis.moveToPoint(75,chassis.getPose().y,800,{.maxSpeed=14,.minSpeed=10});
+    chassis.moveToPoint(75,chassis.getPose().y,1000,{.maxSpeed=30,.minSpeed=10});
     chassis.waitUntilDone();
-    pros::delay(600);
+    pros::delay(500);
     //chassis.moveToPoint(chassis.getPose().x-3,chassis.getPose().y,500);
     //chassis.moveToPoint(75,chassis.getPose().y,500,{.maxSpeed=45,.minSpeed=40});
 }
@@ -494,20 +488,21 @@ void elim_r(){
 
 }
 void sawp(){
-    chassis.setPose(-70.5+(leftdist.get_distance()/25.4+3),-3,0); 
+    chassis.setPose(-70.5+(leftdist.get_distance()/25.4+3.5),-3,0); 
     chassis.moveToPoint(chassis.getPose().x, 4,500,{.minSpeed=40});
     //hood.extend();
     run_intake();
-    chassis.moveToPoint(-46,-48.5,1200,{.forwards=false});
-    match.toggle();
+    chassis.moveToPoint(-46,-48,1300,{.forwards=false});
     chassis.turnToHeading(-90,400);
+    match.toggle();
+
     redloaderquick(true);
 
     chassis.moveToPoint(-20,-48,1200,{.forwards=false});
     chassis.waitUntil(13);
     scoretop();
     chassis.waitUntilDone();
-    pros::delay(800);
+    pros::delay(700);
     chassis.setPose(-28.75,-48,chassis.getPose().theta);
     chassis.moveToPoint(-40,-48,500);
     match.retract();
@@ -517,15 +512,14 @@ void sawp(){
     chassis.moveToPoint(-24,-24,1000);
     chassis.waitUntil(11);
     match.extend();
-    chassis.turnToHeading(0,700);
+    chassis.moveToPoint(-25,24,1200);
     match.retract();
 
-    chassis.moveToPoint(-24,24,1200);
-    chassis.waitUntil(20);
+    chassis.waitUntil(24);
     match.extend();
     chassis.turnToHeading(-45,500);
 
-    chassis.moveToPoint(-10,10,800,{.forwards=false});
+    chassis.moveToPoint(-11,9.5,800,{.forwards=false});
     scorebottom();
 
 
@@ -537,26 +531,63 @@ void sawp(){
     chassis.moveToPoint(-50,48.5,1000);
     chassis.waitUntil(2);
     reclaim();
-    chassis.waitUntil(12);
-
-    run_intake();
+    
     match.extend();
-    top.move_relative(200,600);
     chassis.turnToHeading(-90,800);
+    run_intake();
     chassis.waitUntilDone();
 
-    chassis.setPose(chassis.getPose().x,70.5-(rightdist.get_distance()/25.4+3),chassis.getPose().theta);
+    chassis.setPose(chassis.getPose().x,70.5-(rightdist.get_distance()/25.4+3.5),chassis.getPose().theta);
     
     redloaderquick(true);
     chassis.moveToPoint(-20,48,1000,{.forwards=false});
     chassis.waitUntil(15);
     scoretop();
 }
-void midskills(){
+void far(){
+    chassis.setPose(28.75,48,90);
+    chassis.moveToPose(63.5,0,180,1000);
+    match.retract();
+
+    chassis.moveToPoint(63.5,-40,2000,{.maxSpeed=70,.minSpeed=70});
+    run_intake();
+    chassis.waitUntil(33);
+    match.extend();
+    chassis.moveToPoint(64,-80,900,{.maxSpeed=55,.minSpeed=33});
+    
+    chassis.moveToPoint(64,-10,400,{.forwards=false,.minSpeed=30});
+    chassis.moveToPoint(64,-10,800,{.forwards=false,.maxSpeed=25});
+    chassis.waitUntilDone();
+    chassis.setPose(70.5-(leftdist.get_distance()/25.4+3.5),-14.5,chassis.getPose().theta);
+    pros::delay(50);
+
+    chassis.moveToPoint(chassis.getPose().x-1,-20,1000,{.maxSpeed=40});
+    match.retract();
+
+    chassis.swingToHeading(-80,lemlib::DriveSide::RIGHT,800);
+    
+    chassis.moveToPoint(22,-13,1200);
+    chassis.waitUntil(20);
+    chassis.turnToHeading(120,800,{.maxSpeed=50});
+    match.extend();
+    chassis.moveToPoint(12,-12.5,900,{.forwards=false});
+    
+    chassis.turnToHeading(135,300,{.minSpeed=20});
+    chassis.waitUntilDone();
+    scorebottom();
+    
+    pros::delay(2500);
+    chassis.cancelAllMotions();
+
+
+    //last half-
+    chassis.moveToPoint(46,-49,1300);
+}
+void drivskills(){
     chassis.setPose(-50,6,90);
     
-    run_intake();
-
+    intake.move_voltage(13000);
+    top.move_voltage(13000);
     chassis.moveToPoint(-24,24,1200,{.maxSpeed=70});
     chassis.waitUntil(12);
     match.extend();
@@ -565,15 +596,12 @@ void midskills(){
     chassis.moveToPose(-7,6,-45,1400,{.forwards=false,.maxSpeed=70});
     chassis.waitUntil(15);
     scorebottom();
-    pros::delay(200);
-    scorebottomslow();
     pros::delay(800);
-    chassis.moveToPoint(-50,50,1000);
+    chassis.moveToPoint(-50,50,1100);
     chassis.waitUntil(2);
     reclaim();
-    chassis.waitUntil(12);
-    stop();
     chassis.turnToHeading(-90,500);
+    stop();
 
     redloaderskillsclose();
     
@@ -584,16 +612,20 @@ void midskills(){
     match.retract();
 
     chassis.turnToHeading(90,1000);
+    
+}
+void midskills(){
+    drivskills();
     stop();
     chassis.moveToPoint(34,58,1000,{.minSpeed=30});
     //match.retract();
-    chassis.moveToPose(40,43,180,1200,{.minSpeed=30});
+    chassis.moveToPose(40,42,180,1200,{.minSpeed=30});
     chassis.turnToHeading(90,800);
 
 
     chassis.waitUntilDone();
-    chassis.setPose(chassis.getPose().x,70.5-((leftdist.get_distance()/25.4+3)),chassis.getPose().theta);
-    chassis.moveToPoint(0,48,1000,{.forwards=false,.maxSpeed=70});
+    chassis.setPose(chassis.getPose().x,70.5-((leftdist.get_distance()/25.4+3.5)),chassis.getPose().theta);
+    chassis.moveToPoint(20,48,1000,{.forwards=false,.maxSpeed=70});
     chassis.waitUntil(6);
     scoretop();
     pros::delay(900);
@@ -629,54 +661,11 @@ void midskills(){
 
     //crossred
     chassis.waitUntilDone();
-    chassis.setPose(28.75,48,90);
-    chassis.moveToPose(63.5,0,180,1000);
-    match.retract();
-
-    chassis.moveToPoint(63.5,-40,2000,{.maxSpeed=70,.minSpeed=70});
-    run_intake();
-    chassis.waitUntil(28);
-    match.extend();
-    chassis.moveToPoint(64,-80,900,{.maxSpeed=45,.minSpeed=33});
-    
-    chassis.moveToPoint(64,-10,400,{.forwards=false,.minSpeed=30});
-    chassis.moveToPoint(64,-10,800,{.forwards=false,.maxSpeed=30});
-    chassis.waitUntilDone();
-    chassis.setPose(70.5-(leftdist.get_distance()/25.4+3),-14.5,chassis.getPose().theta);
-    pros::delay(50);
-
-    chassis.moveToPoint(chassis.getPose().x-1,-25,1000,{.maxSpeed=40});
-    match.retract();
-
-    chassis.swingToHeading(-80,lemlib::DriveSide::RIGHT,800);
-    
-    chassis.moveToPoint(20,-15,1200);
-    chassis.waitUntil(20);
-    chassis.turnToHeading(132,800,{.maxSpeed=50});
-    chassis.moveToPoint(12,-13,800,{.forwards=false});
-    chassis.turnToHeading(135,300,{.minSpeed=20});
-    outtakefast();
-    chassis.waitUntil(3);
-    scorebottom();
-    
-    pros::delay(200);
-    scorebottomslow();
-    pros::delay(2400);
-    
-
-
-    //last half
-    chassis.moveToPoint(48,-50,1200);
-    match.extend();
-    chassis.waitUntil(2);
-    reclaim();
-    chassis.waitUntil(12);
-    stop();
-    
+    far();
     chassis.turnToHeading(90,500);
-    scorebottom();
+    stop();
     chassis.waitUntilDone();
-    chassis.setPose(chassis.getPose().x,-70.5+((rightdist.get_distance()/25.4+3)),chassis.getPose().theta);
+    chassis.setPose(chassis.getPose().x,-70.5+((rightdist.get_distance()/25.4+3.5)),chassis.getPose().theta);
     
     run_intake();
 
@@ -692,16 +681,16 @@ void midskills(){
     chassis.turnToHeading(-90,1000);
     stop();
     chassis.waitUntilDone();
-    chassis.setPose(chassis.getPose().x,-70.5+((leftdist.get_distance()/25.4+3)),chassis.getPose().theta);
+    chassis.setPose(chassis.getPose().x,-70.5+((leftdist.get_distance()/25.4+3.5)),chassis.getPose().theta);
 
     chassis.moveToPoint(-34,-61,1000,{.minSpeed=30});
-     chassis.moveToPose(-40,-44,0,1200,{.minSpeed=30});
+     chassis.moveToPose(-40,-43.8,0,1200,{.minSpeed=30});
     chassis.turnToHeading(-90,800);
 
 
     chassis.waitUntilDone();
-    chassis.setPose(chassis.getPose().x,-70.5+((leftdist.get_distance()/25.4+3)),chassis.getPose().theta);
-    chassis.moveToPoint(0,-48,1000,{.forwards=false});
+    chassis.setPose(chassis.getPose().x,-70.5+((leftdist.get_distance()/25.4+3.5)),chassis.getPose().theta);
+    chassis.moveToPoint(20,-48,1000,{.forwards=false});
     chassis.waitUntil(6);
     scoretop();
     pros::delay(900);
@@ -748,79 +737,11 @@ void midskills(){
     match.extend();
     chassis.waitUntil(12);
     match.retract(); 
-    chassis.waitUntil(33);  
+    chassis.waitUntil(40);  
     chassis.cancelAllMotions();
 }
-void drivskills(){
-    chassis.setPose(-50,6,90);
-    
-    run_intake();
 
-    chassis.moveToPoint(-24,24,1200,{.maxSpeed=70});
-    chassis.waitUntil(12);
-    match.extend();
 
-    //chassis.turnToHeading(-45,1000);
-    chassis.moveToPose(-7,6,-45,1400,{.forwards=false,.maxSpeed=70});
-    chassis.waitUntil(15);
-    scorebottom();
-    pros::delay(200);
-    scorebottomslow();
-    pros::delay(800);
-    chassis.moveToPoint(-50,50,1000);
-    chassis.waitUntil(2);
-    reclaim();
-    chassis.waitUntil(12);
-    stop();
-    chassis.turnToHeading(-90,500);
-
-    redloaderskillsclose();
-    
-    //crosstop
-
-    chassis.moveToPoint(-40,60,1000,{.forwards=false});
-    chassis.waitUntil(6);
-    match.retract();
-
-    chassis.turnToHeading(90,1000);
-    stop();
-    
-}
-void far(){
-    chassis.setPose(28.75,48,90);
-    chassis.moveToPose(63.5,0,180,1000);
-    match.retract();
-
-    chassis.moveToPoint(63.5,-40,2000,{.maxSpeed=70,.minSpeed=70});
-    run_intake();
-    chassis.waitUntil(28);
-    match.extend();
-    chassis.moveToPoint(64,-80,500,{.maxSpeed=45,.minSpeed=33});
-    
-    chassis.moveToPoint(64,-10,400,{.forwards=false,.minSpeed=30});
-    chassis.moveToPoint(64,-10,800,{.forwards=false,.maxSpeed=30});
-    chassis.waitUntilDone();
-    chassis.setPose(70.5-(leftdist.get_distance()/25.4+3),-14.5,chassis.getPose().theta);
-    pros::delay(50);
-
-    chassis.moveToPoint(chassis.getPose().x-1,-25,1000,{.maxSpeed=40});
-    match.retract();
-
-    chassis.swingToHeading(-80,lemlib::DriveSide::RIGHT,800);
-    
-    chassis.moveToPoint(20,-18,1200);
-    chassis.waitUntil(20);
-    match.extend();
-    chassis.turnToHeading(132,800,{.maxSpeed=50});
-    chassis.moveToPoint(12,-13,800,{.forwards=false});
-    chassis.turnToHeading(135,300,{.minSpeed=20});
-    outtakefast();
-    chassis.waitUntil(3);
-    scorebottom();
-    
-    pros::delay(200);
-    scorebottomslow();
-}
 // Create robodash selector
 rd::Selector selector({
     {"SAWP", &sawp, "", 50},//done
@@ -854,6 +775,7 @@ void initialize() {
             // }else if (!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)){
             //     descore.retract();
             // }
+            selectTask.delay(50);
         }
     });
     
@@ -967,7 +889,8 @@ void opcontrol() {
             run_intake();
             chassis.waitUntil(28);
             match.extend();
-            chassis.moveToPoint(64,-80,500,{.maxSpeed=45,.minSpeed=33});
+            chassis.moveToPoint(64,-80,700,{.maxSpeed=55,.minSpeed=33});
+            //midskills();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){
             drivskills();
