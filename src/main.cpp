@@ -19,13 +19,15 @@ pros::MotorGroup leftMotors({-2,-19,-12},
                             pros::MotorGearset::blue); // left motor group - ports 3 (reversed), 4, 5 (reversed)
 pros::MotorGroup rightMotors({9,20,13}, pros::MotorGearset::blue); // right motor group - ports 6, 7, 9 (reversed)
 
-pros::Motor intake(1);
-pros::Motor top(8);
-pros::Motor out(-21);
+pros::Motor intake(-3);
+pros::Motor top(-10);
+//pros::Motor out(10);
 
-pros::adi::Pneumatics hood(1, false);
-pros::adi::Pneumatics descore(2, false);
-pros::adi::Pneumatics match(6, false);
+pros::adi::Pneumatics outtake(1, false);
+pros::adi::Pneumatics descore(4, false);
+pros::adi::Pneumatics match(2, false);
+pros::adi::Pneumatics lift(3, false);
+
 //pros::adi::Pneumatics park(7, false);
 pros::ADIDigitalIn button (8);
 // Inertial Sensor on port 11
@@ -110,47 +112,50 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void run_intake(){
     intake.move_voltage(13000);
     top.move_voltage(8000);
-    out.move_voltage(12000);
-    hood.retract();
-    //lift.retract();
+    //out.move_voltage(12000);
+    outtake.extend();
+    lift.retract();
 }
 
 void outtakefast(){
     intake.move_voltage(-8000);
     top.move_voltage(-8000);
+    lift.extend();
 }
 void scoretop(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    out.move_voltage(13000);
-    hood.extend();
+    //out.move_voltage(13000);
+    outtake.extend();
+    descore.retract();
+    lift.retract();
 }
 void scorebottom(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    out.move_voltage(-13000);
+    //out.move_voltage(-13000);
 
-    //hood.extend();  
+    outtake.retract();  
 }
 void scorebottomslow(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    out.move_velocity(-105);
+    //out.move_velocity(-105);
 }
 void scoot(){
     intake.move_voltage(13000);
     top.move_voltage(0);
-    //out.move_voltage(10000);
+    ////out.move_voltage(10000);
 }
 void stop(){
     intake.move_voltage(0);
     top.move_voltage(0);
-    out.move_voltage(0);
+    //out.move_voltage(0);
 
 }
 void reclaim(){
     top.move_voltage(-13000);
-    out.move_voltage(13000);
+    //out.move_voltage(13000);
 }
 void push(bool side){
     if(side){//left
@@ -224,7 +229,7 @@ void skillsv2() {
     //left red
     chassis.setPose(-70.5+(leftdist.get_distance()/25.4+4.5),14,0); 
     chassis.moveToPose(chassis.getPose().x, 48,-90,3000,{.earlyExitRange=2});
-    hood.extend();
+    outtake.extend();
     run_intake();
     match.toggle();
     chassis.waitUntilDone();
@@ -490,7 +495,7 @@ void elim_r(){
 void sawp(){
     chassis.setPose(-70.5+(leftdist.get_distance()/25.4+3.5),-3,0); 
     chassis.moveToPoint(chassis.getPose().x, 4,500,{.minSpeed=40});
-    //hood.extend();
+    //outtake.extend();
     run_intake();
     chassis.moveToPoint(-46,-48,1300,{.forwards=false});
     chassis.turnToHeading(-90,400);
@@ -797,7 +802,7 @@ void initialize() {
  * Runs while the robot is disabled
  */
 void disabled() {
-    hood.retract();
+    //.retract();
 }
 
 /**
@@ -834,6 +839,7 @@ void opcontrol() {
         if(!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_L2)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_R1)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_R2)&&!controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN)){
             stop();
             descore.extend();
+            
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1))
         {
