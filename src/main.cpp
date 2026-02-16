@@ -25,8 +25,8 @@ pros::Motor top(-10);
 
 pros::adi::Pneumatics outtake(1, false);
 pros::adi::Pneumatics descore(4, false);
-pros::adi::Pneumatics match(2, false);
-pros::adi::Pneumatics lift(3, false);
+pros::adi::Pneumatics match(3, false);
+pros::adi::Pneumatics lift(2, false);
 
 //pros::adi::Pneumatics park(7, false);
 pros::ADIDigitalIn button (8);
@@ -118,8 +118,8 @@ void run_intake(){
 }
 
 void outtakefast(){
-    intake.move_voltage(-8000);
-    top.move_voltage(-8000);
+    intake.move_voltage(-6000);
+    top.move_voltage(-13000);
     lift.extend();
 }
 void scoretop(){
@@ -132,7 +132,7 @@ void scoretop(){
 }
 void scorebottom(){
     intake.move_voltage(13000);
-    top.move_voltage(13000);
+    top.move_voltage(6000);
     //out.move_voltage(-13000);
 
     outtake.retract();  
