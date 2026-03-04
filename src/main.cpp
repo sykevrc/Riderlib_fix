@@ -111,7 +111,7 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 
 void run_intake(){
     intake.move_voltage(13000);
-    top.move_voltage(8000);
+    top.move_voltage(5000);
     //out.move_voltage(12000);
     outtake.extend();
     lift.retract();
