@@ -20,8 +20,9 @@ pros::MotorGroup leftMotors({-2,-19,-12},
 pros::MotorGroup rightMotors({9,20,13}, pros::MotorGearset::blue); // right motor group - ports 6, 7, 9 (reversed)
 
 pros::Motor intake(-3);
-pros::Motor top(-10);
-//pros::Motor out(10);
+pros::Motor top(10);
+
+pros::Motor out(6);
 
 pros::adi::Pneumatics outtake(1, false);
 pros::adi::Pneumatics descore(4, false);
@@ -42,7 +43,7 @@ pros::Imu imu(11);
 pros::Distance rightdist(7);
 pros::Distance leftdist(4);
 
-pros::Optical colorsens(3);
+pros::Optical colorsens(8);
 // horizontal tracking wheel. 2.75" diameter, 5.75" offset, back of the robot (negative)
 //lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -5.75);
 // vertical tracking wheel. 2" diameter, .5" offset, right of the robot (negative)
@@ -112,35 +113,49 @@ lemlib::Chassis chassis(drivetrain, linearController, angularController, sensors
 void run_intake(){
     intake.move_voltage(13000);
     top.move_voltage(5000);
-    //out.move_voltage(12000);
-    outtake.extend();
+    out.move_voltage(12000);
+    if(out.get_power()>4)out.move_voltage(1000);
+
+    outtake.retract();
     lift.retract();
 }
 
 void outtakefast(){
-    intake.move_voltage(-6000);
+    intake.move_voltage(-8000);
     top.move_voltage(-13000);
+    out.move_relative(-100,200);
+    lift.extend();
+}
+void outtakeslow(){
+    intake.move_voltage(-4000);
+    top.move_voltage(-13000);
+    out.move_relative(-100,200);
     lift.extend();
 }
 void scoretop(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    //out.move_voltage(13000);
+    out.move_voltage(13000);
     outtake.extend();
-    descore.retract();
+    //descore.retract();
     lift.retract();
 }
 void scorebottom(){
     intake.move_voltage(13000);
     top.move_voltage(6000);
-    //out.move_voltage(-13000);
+    out.move_voltage(-13000);
 
-    outtake.retract();  
+    //outtake.retract();  
 }
 void scorebottomslow(){
     intake.move_voltage(13000);
     top.move_voltage(13000);
-    //out.move_velocity(-105);
+    out.move_voltage(-6000);
+}
+void scorebottomrllyslow(){
+    intake.move_voltage(13000);
+    top.move_voltage(13000);
+    out.move_voltage(-3000);
 }
 void scoot(){
     intake.move_voltage(13000);
@@ -150,12 +165,12 @@ void scoot(){
 void stop(){
     intake.move_voltage(0);
     top.move_voltage(0);
-    //out.move_voltage(0);
+    out.move_voltage(0);
 
 }
 void reclaim(){
     top.move_voltage(-13000);
-    //out.move_voltage(13000);
+    out.move_voltage(13000);
 }
 void push(bool side){
     if(side){//left
@@ -870,33 +885,23 @@ void opcontrol() {
         {
             scorebottomslow();
         }
+        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
+            outtakeslow();
+        }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A))
         {
             
-            chassis.setPose(28.75,48,90);
-            chassis.moveToPose(63.5,0,180,1000);
-            match.retract();
-
+            chassis.setPose(0,0,0);
             run_intake();
-            chassis.moveToPoint(63.5,-40,2000,{.maxSpeed=75,.minSpeed=65});
+            
+            chassis.moveToPoint(0,60,2000,{.maxSpeed=65,.minSpeed=65});
+
+            chassis.waitUntil(20);
             match.extend();
-            chassis.waitUntil(12);
-            match.retract(); 
-            chassis.waitUntil(33);  
-            chassis.cancelAllMotions();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y))
         {
-            chassis.setPose(28.75,48,90);
-            chassis.moveToPose(63.5,0,180,1000);
-            match.retract();
-
-            chassis.moveToPoint(63.5,-40,2000,{.maxSpeed=70,.minSpeed=70});
-            run_intake();
-            chassis.waitUntil(28);
-            match.extend();
-            chassis.moveToPoint(64,-80,700,{.maxSpeed=55,.minSpeed=33});
-            //midskills();
+            scorebottomrllyslow();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X)){
             drivskills();
