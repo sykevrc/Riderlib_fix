@@ -511,11 +511,11 @@ void sev_l(){
     chassis.setPose(front_reset(3.5,5.25,false),right_reset(0.5,3.5,true),chassis.getPose().theta);
     chassis.moveToPoint(-40,chassis.getPose().y,300,{.forwards=false});
     match.retract();
-    chassis.turnToHeading(35,300);
+    chassis.turnToHeading(-35,300);
     chassis.moveToPoint(-13,12,1300,{.forwards=false,.minSpeed=30});
     chassis.waitUntil(26);
     scorebottomslow();
-    chassis.turnToHeading(45,300);
+    chassis.turnToHeading(-45,300);
     chassis.waitUntilDone();   
     pros::delay(1000);
 }
@@ -1208,7 +1208,7 @@ void opcontrol() {
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN))
         {
-            outtakefast();
+            outtake_no_lift();
         }
         if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_B))
         {
@@ -1220,14 +1220,14 @@ void opcontrol() {
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A))
         {
             
-            sev_r();
+            sev_l();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X))
         {
-            scorebottomrllyslow();
+            four_l();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
-            dump_r();
+            dump_l();
         }
         // delay to save resources
         pros::delay(10);
