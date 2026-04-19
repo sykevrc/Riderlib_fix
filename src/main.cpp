@@ -780,27 +780,29 @@ void nine_r(){
     run_intake();
     chassis.moveToPoint(-11,-30,700,{.minSpeed=30});
     chassis.swingToHeading(170,DriveSide::RIGHT,400,{.minSpeed=30});
-    chassis.moveToPoint(-8,-40,600);
+    chassis.moveToPoint(-8,-42,600,{.minSpeed=30});
     chassis.moveToPoint(-36,-30,800,{.forwards=false,.minSpeed=30});
-    chassis.moveToPoint(-48,-48,1200,{.forwards=false,.minSpeed=30});
-    chassis.turnToHeading(-90,700,{.maxSpeed=60});
+    chassis.moveToPoint(-46,-45,1200,{.forwards=false,.minSpeed=30});
+    chassis.turnToHeading(-90,600,{.maxSpeed=60});
     match.extend();
-    chassis.moveToPoint(-70,chassis.getPose().y,400,{.minSpeed=40});
-    redloaderquick(true);
+    chassis.moveToPoint(-70,chassis.getPose().y,600,{.minSpeed=40});
+    //redloaderquick(true);
     chassis.waitUntilDone();
-    chassis.setPose(front_reset(3.5,5.25,false),-48,chassis.getPose().theta);
-    chassis.moveToPoint(-14,chassis.getPose().y+12,1000,{.forwards=false});
+    chassis.setPose(-55.25,-47,chassis.getPose().theta);
+    chassis.moveToPoint(-20, chassis.getPose().y,200,{.forwards=false,.minSpeed=40});
+    chassis.moveToPose(-24,-36,-90,700,{.forwards=false,.minSpeed=40});
     match.retract();
     descore.extend();
-    chassis.turnToHeading(-90,400);
-    chassis.moveToPoint(-44,chassis.getPose().y,800);
+    chassis.turnToHeading(-90,300);
+    chassis.moveToPoint(-5,chassis.getPose().y,1000,{.forwards=false,.minSpeed=40});
+    chassis.moveToPoint(-51,chassis.getPose().y,800,{.minSpeed=40});
     descore.retract();
-    chassis.moveToPoint(-48,-48,800);
-    chassis.moveToPoint(-10,-48,800,{.forwards=false});
+    chassis.turnToHeading(-50,300);
+    chassis.moveToPose(-10,-47,-90,800,{.forwards=false,.minSpeed=40});
     chassis.waitUntil(16);
     scoretop();
+    chassis.moveToPoint(-10,-48,500,{.forwards=false});
     chassis.waitUntilDone();
-    pros::delay(400);
     outtake.retract();
     out.move_voltage(-100);
     top.move_voltage(-10000);
@@ -808,13 +810,56 @@ void nine_r(){
     chassis.setPose(-28.75,-48,chassis.getPose().theta);
     
     chassis.moveToPoint(-40,chassis.getPose().y,300);
-    chassis.turnToHeading(35,300);
-    chassis.moveToPoint(-13,-12,1300,{.minSpeed=30});
+    chassis.turnToHeading(45,300);
+    chassis.moveToPoint(-13,-13,1300);
     chassis.waitUntil(26);
     outtakefast(); 
     chassis.turnToHeading(45,300);
     chassis.waitUntilDone();   
-    pros::delay(1000);
+    pros::delay(10000);
+}
+void nine_l(){
+    chassis.setPose(-49.5,16,90);
+    chassis.moveToPoint(-26,24,400,{.minSpeed=30});
+    run_intake();
+    chassis.moveToPoint(-11,30,700,{.minSpeed=30});
+    chassis.swingToHeading(10,DriveSide::RIGHT,400,{.minSpeed=30});
+    chassis.moveToPoint(-8,42,600,{.minSpeed=30});
+    chassis.moveToPoint(-36,30,800,{.forwards=false,.minSpeed=30});
+    chassis.moveToPoint(-46,45,1200,{.forwards=false,.minSpeed=30});
+    chassis.turnToHeading(-90,600,{.maxSpeed=60});
+    match.extend();
+    chassis.moveToPoint(-70,chassis.getPose().y,600,{.minSpeed=40});
+    //redloaderquick(true);
+    chassis.waitUntilDone();
+    chassis.setPose(-55.25,47,chassis.getPose().theta);
+    chassis.moveToPoint(-20, chassis.getPose().y,200,{.forwards=false,.minSpeed=40});
+    chassis.moveToPose(-24,36,-90,700,{.forwards=false,.minSpeed=40});
+    match.retract();
+    descore.extend();
+    chassis.turnToHeading(-90,300);
+    chassis.moveToPoint(-5,chassis.getPose().y,1000,{.forwards=false,.minSpeed=40});
+    chassis.moveToPoint(-51,chassis.getPose().y,800,{.minSpeed=40});
+    descore.retract();
+    chassis.turnToHeading(-130,300);
+    chassis.moveToPose(-10,47,-90,800,{.forwards=false,.minSpeed=40});
+    chassis.waitUntil(16);
+    scoretop();
+    chassis.moveToPoint(-10,48,500,{.forwards=false});
+    chassis.waitUntilDone();
+    stop();
+    chassis.setPose(-28.75,48,chassis.getPose().theta);
+    
+    chassis.moveToPoint(-40,chassis.getPose().y,300);
+    out.move_relative(-400,600);
+    top.move_relative(-600,600);
+    chassis.turnToHeading(-45,300);
+    chassis.moveToPoint(-8,-8,1300,{.forwards=false});
+    chassis.waitUntil(26);
+    scorebottomslow(); 
+    chassis.turnToHeading(-45,300);
+    chassis.waitUntilDone();   
+    pros::delay(10000);
 }
 void drivskills(){
     chassis.setPose(-50,6,90);
@@ -1302,7 +1347,7 @@ void opcontrol() {
             nine_r();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
-            dump_l();
+            nine_l();
         }
         // delay to save resources
         pros::delay(10);
