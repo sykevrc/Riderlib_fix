@@ -187,7 +187,7 @@ void scorebottomslow(){
 void scorebottomrllyslow(){
     intake.move_voltage(13000);
     top.move_voltage(8000);
-    out.move_voltage(-2000);
+    out.move_voltage(-1500);
 }
 void scoot(){
     intake.move_voltage(13000);
@@ -281,18 +281,18 @@ void bluezoneclear(){
     chassis.waitUntilDone();
     pros::delay(700);
 
-    chassis.moveToPoint(chassis.getPose().x-20, chassis.getPose().y,1200,{.maxSpeed=50,.minSpeed=50});
+    chassis.moveToPoint(chassis.getPose().x-20, chassis.getPose().y,800,{.maxSpeed=50,.minSpeed=50});
     //chassis.moveToPoint(chassis.getPose().x+7, chassis.getPose().y,400,{.forwards=false,.maxSpeed=30,.minSpeed=30});
     chassis.moveToPoint(chassis.getPose().x+2, chassis.getPose().y,400,{.forwards=false,.maxSpeed=30,.minSpeed=30});
 
-    //chassis.waitUntilDone();
-    // rightMotors.move_voltage(7000);
-    // pros::delay(200);
-    // for(int i = 0; i < 3; i++){
-    // wiggle();
-    // }
-    //leftMotors.move_voltage(0);
-    //rightMotors.move_voltage(0);
+    chassis.waitUntilDone();
+    rightMotors.move_voltage(7000);
+    pros::delay(200);
+    for(int i = 0; i < 3; i++){
+    wiggle();
+    }
+    leftMotors.move_voltage(0);
+    rightMotors.move_voltage(0);
     chassis.moveToPoint(chassis.getPose().x+32, chassis.getPose().y,1000,{.forwards=false,.maxSpeed=60});
     chassis.turnToHeading(-90,700);
     chassis.waitUntilDone();
@@ -328,7 +328,7 @@ void redzoneclear(){
     chassis.moveToPoint(36,48,400,{.minSpeed=20});
     chassis.turnToHeading(180,800);
 
-    chassis.moveToPoint(39,1,1500);
+    chassis.moveToPoint(38,0.5,1500);
     run_intake();
     chassis.turnToHeading(90,800);
     chassis.moveToPoint(75,0,1200,{ .maxSpeed=75,.minSpeed=75});
@@ -339,7 +339,7 @@ void redzoneclear(){
 
     chassis.moveToPoint(chassis.getPose().x+20, chassis.getPose().y,800,{.maxSpeed=60,.minSpeed=30});
     //chassis.moveToPoint(chassis.getPose().x+7, chassis.getPose().y,400,{.forwards=false,.maxSpeed=30,.minSpeed=30});
-    chassis.moveToPoint(chassis.getPose().x-2, chassis.getPose().y,400,{.forwards=false,.maxSpeed=30,.minSpeed=30});
+    //chassis.moveToPoint(chassis.getPose().x-2, chassis.getPose().y,400,{.forwards=false,.maxSpeed=30,.minSpeed=30});
 
     chassis.waitUntilDone();
     for(int i = 0; i < 3; i++){
@@ -350,7 +350,7 @@ void redzoneclear(){
     chassis.moveToPoint(chassis.getPose().x-32, chassis.getPose().y,1000,{.forwards=false});
     chassis.turnToHeading(90,500);
     chassis.waitUntilDone();
-    chassis.setPose(70.5-(leftdist.get_distance()/25.4+5.92),-70.5+(rightdist.get_distance()/25.4+3.5),chassis.getPose().theta);
+    chassis.setPose(front_reset(3.5,5.25,true),right_reset(0.5,3.5,true),chassis.getPose().theta);
 }
 void skillsv2() {
    
@@ -617,7 +617,7 @@ void sawp(){
     chassis.moveToPoint(-100,chassis.getPose().y,50);
     redloaderquick(true);
 
-    chassis.moveToPoint(-20,chassis.getPose().y,1200,{.forwards=false,.minSpeed=40});
+    chassis.moveToPoint(-20,chassis.getPose().y+.25,1200,{.forwards=false,.minSpeed=40});
     chassis.waitUntil(16);
     scoretop();
     chassis.waitUntilDone();
@@ -667,12 +667,12 @@ void sawp(){
     chassis.waitUntil(26);
     scorebottomslow(); 
     chassis.waitUntilDone();   
-    chassis.setPose(-8,8,chassis.getPose().theta);
-    pros::delay(500);
-    chassis.moveToPoint(-24,29,700,{.minSpeed=40});
-    chassis.swingToHeading(80,DriveSide::RIGHT,300,{.minSpeed=40});
-    chassis.moveToPoint(-5,37,500,{.minSpeed=40});
-    chassis.swingToHeading(135,DriveSide::RIGHT,300,{.minSpeed=40});
+    //chassis.setPose(-8,8,chassis.getPose().theta);
+    pros::delay(5000);
+    // chassis.moveToPoint(-24,29,700,{.minSpeed=40});
+    // chassis.swingToHeading(80,DriveSide::RIGHT,300,{.minSpeed=40});
+    // chassis.moveToPoint(-5,37,500,{.minSpeed=40});
+    // chassis.swingToHeading(135,DriveSide::RIGHT,300,{.minSpeed=40});
 
 }
 void dump_r(){
@@ -785,7 +785,7 @@ void nine_r(){
     chassis.moveToPoint(-46,-45,1200,{.forwards=false,.minSpeed=30});
     chassis.turnToHeading(-90,600,{.maxSpeed=60});
     match.extend();
-    chassis.moveToPoint(-70,chassis.getPose().y,600,{.minSpeed=40});
+    chassis.moveToPoint(-70,chassis.getPose().y,800,{.minSpeed=40});
     //redloaderquick(true);
     chassis.waitUntilDone();
     chassis.setPose(-55.25,-47,chassis.getPose().theta);
@@ -823,38 +823,38 @@ void nine_l(){
     chassis.moveToPoint(-26,24,400,{.minSpeed=30});
     run_intake();
     chassis.moveToPoint(-11,30,700,{.minSpeed=30});
-    chassis.swingToHeading(10,DriveSide::RIGHT,400,{.minSpeed=30});
-    chassis.moveToPoint(-8,42,600,{.minSpeed=30});
-    chassis.moveToPoint(-36,30,800,{.forwards=false,.minSpeed=30});
-    chassis.moveToPoint(-46,45,1200,{.forwards=false,.minSpeed=30});
+    chassis.swingToHeading(10,DriveSide::LEFT,400,{.minSpeed=30});
+    chassis.moveToPoint(-8,43,600,{.minSpeed=30});
+    chassis.moveToPoint(-36,30,700,{.forwards=false,.minSpeed=30});
+    chassis.moveToPoint(-46,49.5,1100,{.forwards=false,.minSpeed=30});
     chassis.turnToHeading(-90,600,{.maxSpeed=60});
     match.extend();
-    chassis.moveToPoint(-70,chassis.getPose().y,600,{.minSpeed=40});
+    chassis.moveToPoint(-70,chassis.getPose().y,900,{.minSpeed=40});
     //redloaderquick(true);
-    chassis.waitUntilDone();
+    chassis.waitUntilDone(); 
     chassis.setPose(-55.25,47,chassis.getPose().theta);
     chassis.moveToPoint(-20, chassis.getPose().y,200,{.forwards=false,.minSpeed=40});
-    chassis.moveToPose(-24,36,-90,700,{.forwards=false,.minSpeed=40});
+    chassis.moveToPose(-24,60,-90,700,{.forwards=false,.minSpeed=40});
     match.retract();
     descore.extend();
     chassis.turnToHeading(-90,300);
-    chassis.moveToPoint(-5,chassis.getPose().y,1000,{.forwards=false,.minSpeed=40});
-    chassis.moveToPoint(-51,chassis.getPose().y,800,{.minSpeed=40});
+    chassis.moveToPoint(-2,chassis.getPose().y,1000,{.forwards=false,.minSpeed=40});
+    chassis.moveToPoint(-54,chassis.getPose().y,800,{.minSpeed=40});
     descore.retract();
-    chassis.turnToHeading(-130,300);
-    chassis.moveToPose(-10,47,-90,800,{.forwards=false,.minSpeed=40});
+    chassis.turnToHeading(-50,300);
+    chassis.moveToPose(-10,49.5,-90,800,{.forwards=false,.minSpeed=40});
     chassis.waitUntil(16);
     scoretop();
-    chassis.moveToPoint(-10,48,500,{.forwards=false});
+    chassis.moveToPoint(-10,49,500,{.forwards=false});
     chassis.waitUntilDone();
     stop();
     chassis.setPose(-28.75,48,chassis.getPose().theta);
     
-    chassis.moveToPoint(-40,chassis.getPose().y,300);
+    chassis.moveToPoint(-45,chassis.getPose().y,300);
     out.move_relative(-400,600);
     top.move_relative(-600,600);
     chassis.turnToHeading(-45,300);
-    chassis.moveToPoint(-8,-8,1300,{.forwards=false});
+    chassis.moveToPoint(-6,-8,1300,{.forwards=false});
     chassis.waitUntil(26);
     scorebottomslow(); 
     chassis.turnToHeading(-45,300);
@@ -1019,20 +1019,101 @@ void midskills(){
     chassis.cancelAllMotions();
 }
 void skills119(){
-    descore.extend();
+    // descore.extend();
 
-    //bottom mid 7
-    bluezoneclear();
-    chassis.turnToPoint(-24,-20,600);
+    // //bottom mid 7
+    // bluezoneclear();
+    // chassis.turnToPoint(-18,16,600);
+    // chassis.moveToPoint(-18,18,900);
+    // chassis.turnToHeading(-45,800);
+    // chassis.moveToPoint(chassis.getPose().x-2,chassis.getPose().y+2,300);  
+    // match.extend();
+    // chassis.moveToPoint(-6,6,1000,{.forwards=false,.minSpeed=20});
+    // out.move_relative(-200,200);
+    // top.move_voltage(-7000);
+    // //chassis.turnToHeading(48,800,{.minSpeed=40});
+    // chassis.waitUntilDone();
+    // scorebottomslow();
+    // pros::delay(300);
+    // scorebottomrllyslow();
+    // int startTime = pros::millis();
+    // while ((colorsens.get_hue() > 30) &&
+    //     (pros::millis() - startTime < 3000)) {
+    //     pros::delay(10);}
+    // out.move_voltage(7000);
+    // top.move_voltage(-10000);
+    // chassis.setPose(-9,9,chassis.getPose().theta);
+    // //chassis.moveToPoint(chassis.getPose().x+2,chassis.getPose().y+2,300);
+
+    // //moveto1stloader
+    // // chassis.moveToPoint(-20,-20,600,{.forwards=false,.minSpeed=30});
+    // // chassis.turnToHeading(2,400,{.minSpeed=30});
+    // run_intake();
+    // chassis.moveToPoint(-40,47,1400);
+    // chassis.turnToHeading(-90,500);
+    // match.extend();
+    // chassis.waitUntilDone();
+    // chassis.setPose(chassis.getPose().x,right_reset(0.5,3.5,true),chassis.getPose().theta);
+    // redloaderskillsclose();
+    // chassis.turnToHeading(-90,300);
+    // chassis.waitUntilDone();
+    // chassis.setPose(-55.25,right_reset(0.5,3.5,true),chassis.getPose().theta);
+    // //chassis.setPose(-55.25,70.5-((rightdist.get_distance()/25.4+3.5)),-90);
+    
+
+    // //crosstop
+    // //chassis.moveToPoint(chassis.getPose().x-20, chassis.getPose().y,400,{.forwards=false});
+    // chassis.moveToPose(-12,60,-90,1000,{.forwards=false,.minSpeed=50,.earlyExitRange=4});
+    // chassis.waitUntil(6);
+    // match.retract();
+    // stop();
+    // chassis.moveToPoint(34,60,1300,{.forwards=false,.minSpeed=30});
+    // chassis.waitUntilDone();
+    // chassis.setPose(chassis.getPose().x,right_reset(0.5,3.5,true),chassis.getPose().theta);
+    // chassis.moveToPose(38,47,90,1000,{.forwards=false,.minSpeed=30});
+    // chassis.moveToPoint(10,48,1000,{.forwards=false,.maxSpeed=80});
+    // match.extend();
+    // chassis.waitUntil(4);
+    // scoretop();
+    // chassis.waitUntilDone();
+    // pros::delay(1000);
+    // top.move_voltage(0);
+    // chassis.setPose(28.75,48,chassis.getPose().theta);   
+    
+    // //moveto2ndloader
+    // chassis.moveToPoint(60,47,800,{.minSpeed=40});
+    // outtake_no_lift();
+    // chassis.waitUntil(16);
+    // run_intake();
+    // chassis.cancelMotion();
+    // redloaderskillsfar();    
+    // chassis.moveToPoint(40,49,600,{.forwards=false,.minSpeed=20});
+    // chassis.moveToPoint(0,49,1200,{.forwards=false,.maxSpeed=50});
+    // chassis.waitUntil(8);
+    // scoretop();
+    // pros::delay(900);
+    // outtake_no_lift();
+    // pros::delay(200);
+    // scoretop();
+    // pros::delay(500);
+    // out.move_voltage(5000);
+    // pros::delay(800);
+    chassis.setPose(28.75,48,90); 
+    match.retract();
+
+    //red clear
+    redzoneclear();
+
+    //score
+    chassis.turnToPoint(17,17,600);
     stop();
-    chassis.moveToPoint(-26,-24,900);
-    chassis.waitUntil(17);
-    intake.move_relative(500,600);
-    chassis.turnToHeading(45,800);
-    chassis.moveToPoint(-11,-12,1000);
-    out.move_relative(-200,200);
-    //chassis.turnToHeading(48,800,{.minSpeed=40});
-    chassis.waitUntilDone();
+    chassis.moveToPoint(17,17,1200);
+    // chassis.swingToHeading(45,DriveSide::RIGHT,800);
+    // chassis.moveToPoint(chassis.getPose().x+2,chassis.getPose().y+2,300);  
+    // intake.move_relative(500,600);
+    chassis.turnToHeading(-135,800);
+    chassis.moveToPoint(chassis.getPose().x-3,chassis.getPose().y-3,1000);  
+
     pros::delay(20);
     outtakefast();
     //chassis.waitUntilDone();
@@ -1043,92 +1124,11 @@ void skills119(){
     pros::delay(200);
     outtakeslow();
     pros::delay(1000);
-    chassis.moveToPoint(chassis.getPose().x+2,chassis.getPose().y+2,300);
-
-    //moveto1stloader
-    chassis.moveToPoint(-20,-20,600,{.forwards=false,.minSpeed=30});
-    chassis.turnToHeading(2,400,{.minSpeed=30});
-    run_intake();
-    chassis.moveToPoint(-40,47,1400);
-    chassis.turnToHeading(-90,500);
-    match.extend();
-    chassis.waitUntilDone();
-    chassis.setPose(chassis.getPose().x,right_reset(0.5,3.5,true),chassis.getPose().theta);
-    redloaderskillsclose();
-    chassis.turnToHeading(-90,300);
-    chassis.waitUntilDone();
-    chassis.setPose(-55.25,right_reset(0.5,3.5,true),chassis.getPose().theta);
-    //chassis.setPose(-55.25,70.5-((rightdist.get_distance()/25.4+3.5)),-90);
     
-
-    //crosstop
-    //chassis.moveToPoint(chassis.getPose().x-20, chassis.getPose().y,400,{.forwards=false});
-    chassis.moveToPose(-12,60,-90,1000,{.forwards=false,.minSpeed=50,.earlyExitRange=4});
-    chassis.waitUntil(6);
-    match.retract();
-    stop();
-    chassis.moveToPoint(34,60,1300,{.forwards=false,.minSpeed=30});
-    chassis.waitUntilDone();
-    chassis.setPose(chassis.getPose().x,right_reset(0.5,3.5,true),chassis.getPose().theta);
-    chassis.moveToPose(38,47,90,1000,{.forwards=false,.minSpeed=30});
-    chassis.moveToPoint(10,48,1000,{.forwards=false,.maxSpeed=80});
-    match.extend();
-    chassis.waitUntil(4);
-    scoretop();
-    chassis.waitUntilDone();
-    pros::delay(1000);
-    top.move_voltage(0);
-    chassis.setPose(28.75,48,chassis.getPose().theta);   
-    
-    //moveto2ndloader
-    chassis.moveToPoint(60,47,800,{.minSpeed=40});
-    outtake_no_lift();
-    chassis.waitUntil(16);
-    run_intake();
-    chassis.cancelMotion();
-    redloaderskillsfar();    
-    chassis.moveToPoint(40,49,600,{.forwards=false,.minSpeed=20});
-    chassis.moveToPoint(0,49,1200,{.forwards=false,.maxSpeed=50});
-    chassis.waitUntil(8);
-    scoretop();
-    pros::delay(900);
-    outtake_no_lift();
-    pros::delay(200);
-    scoretop();
-    pros::delay(500);
-    out.move_voltage(5000);
-    pros::delay(800);
-    chassis.setPose(28.75,48,90); 
-    match.retract();
-
-    //red clear
-    redzoneclear();
-
-    //score
-    chassis.turnToPoint(23,-23,600);
-    chassis.moveToPoint(20,-23,700);
-    chassis.waitUntil(30);
-    match.extend();
-    chassis.turnToHeading(135,500);
-    out.move_relative(-300,200);
-    top.move_voltage(-10000);
-    //intake.move_relative(-200,600);
-    chassis.moveToPoint(7,-5,1500,{.forwards=false});
-    chassis.waitUntilDone();
-    scorebottomslow();
-    pros::delay(300);
-    scorebottomrllyslow();
-    int startTime = pros::millis();
-    while ((colorsens.get_hue() < 200 || colorsens.get_hue() > 300) &&
-        (pros::millis() - startTime < 3000)) {
-        pros::delay(10);}
-    out.move_voltage(7000);
-    top.move_voltage(-10000);
-    chassis.setPose(9,-9,chassis.getPose().theta);
-    
-
+    chassis.moveToPoint(20,20,600,{.forwards=false,.minSpeed=30});
+    chassis.turnToHeading(180,400,{.minSpeed=30});
     //moveto3rdloader
-    chassis.moveToPoint(46,-48,1000);
+    chassis.moveToPoint(40,-46,1800);
     chassis.turnToHeading(90,800);
     redloaderskillsfar();
     chassis.turnToHeading(90,300);
@@ -1187,12 +1187,9 @@ void skills119(){
     chassis.waitUntil(30);  
     chassis.cancelAllMotions();
 }
-void testclear(){
-//descore.extend();
-
-    //bottom mid 7
-    bluezoneclear();
-    //chassis.turnToPoint(-24,-22,400);
+void bump(){
+chassis.setPose(0,0,0);
+chassis.moveToPoint(0,3,2000);
 }
 // Create robodash selector
 rd::Selector selector({
@@ -1203,6 +1200,9 @@ rd::Selector selector({
     {"4+3 R", &sev_r, "", 150},//done
     {"fast L", &four_l, "", 50},//done
     {"fast R", &four_r, "", 150},
+    {"goofy L",&nine_l, "", 50},
+    {"goofy R", &nine_r, "", 150},//done
+    {"bump", &bump, "", 200},
     {"Skills", &skills119, "", 250},
 });
 int mode = 0;
@@ -1335,19 +1335,16 @@ void opcontrol() {
             scorebottomslow();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_UP)){
-            outtake_no_lift();
-        }
-        if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_A))
-        {
-            
-            sev_r();
+            outtakefast();
         }
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_X))
         {
-            nine_r();
+            
+            skills119();
         }
+        
         if(controller.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
-            nine_l();
+            outtake_no_lift();
         }
         // delay to save resources
         pros::delay(10);
